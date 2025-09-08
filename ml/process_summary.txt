@@ -1,0 +1,9 @@
+Linear Regression Data Analysis Summary
+--------------------------------------
+Input file: linear_regression_data.csv
+Total data points processed: 3000
+Average ratio (y/x): 3.2745
+
+Notes:
+- Points with x=0 were ignored to avoid division errors.
+- This average ratio can be used as a rough predictor but may not be as accurate as proper linear regression.
