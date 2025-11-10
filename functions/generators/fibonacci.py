@@ -1,4 +1,5 @@
 def generate_fibonacci():
+    """This function returns the next number in fibonacci series."""
     num1 = 0
     num2 = 1
     yield num1
