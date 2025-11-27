@@ -1,1 +1,1 @@
-Documentation getting to know Python
+Documentation of getting to know Python

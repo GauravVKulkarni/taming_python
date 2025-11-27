@@ -6,7 +6,7 @@ lock = threading.Lock()
 
 def increment():
     global variable
-    for _ in range(100000):
+    for _ in range(100000000):
         # with lock:
         #     variable += 1
         variable += 1
