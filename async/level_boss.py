@@ -1,3 +1,5 @@
+# simulation of a pipeline (producer -> processor -> consumer)
+
 import asyncio
 import random
 
@@ -13,13 +15,18 @@ async def producer(vid_data_obj, processing_queue):
 
 
 async def processor(processing_queue, consumer_queue):
+    
+    # This function takes a queue containing video metadata objects, processes them asynchronously and puts the processed data in the consumer_queue
+    # input format - processing_queue : {queue}, consumer_queue : {queue}
+
+    # object mapping the codec to its bitrate value (mbps)
     bitrate_map = {
         ".mp4": 3,
         ".mov": 6,
         ".mkv": 4,
     }
-    # This function takes a queue containing video metadata objects, processes them asynchronously and puts the processed data in the consumer_queue
-    # input format - processing_queue : {queue}, consumer_queue : {queue}
+
+    # an indefinitely running processor loop that processes tasks taken from processor queue and accepts the next task from the queue as soon as it is available
     while True:
         obj = await processing_queue.get()
         try:
@@ -32,6 +39,8 @@ async def processor(processing_queue, consumer_queue):
 
             await consumer_queue.put(processed_obj)
             print(f'Finished processing {obj["id"]}. entered into the consumer queue.')
+        except:
+            print(f'failed processing {obj["id"]}')
         finally:
             processing_queue.task_done()
 
@@ -40,6 +49,8 @@ async def processor(processing_queue, consumer_queue):
 async def consumer(consumer_queue, db_aka_list):
     # This function takes processed objects from the consumer queue and stores them in a list with a delay, mimicking database transaction.
     # input format - consumer_queue : {queue}, db_aka_list : {list}
+
+    # an indefinitely running consumer loop that sends objects in consumer queue to storage as soon as it is available
     while True:
         obj = await consumer_queue.get()
         try:
@@ -53,6 +64,8 @@ async def consumer(consumer_queue, db_aka_list):
 
 
 async def orchestrator(sample_videos):
+
+    # the function that handles the components of the pipeline
 
     processing_queue = asyncio.Queue()
     consumer_queue = asyncio.Queue()
